@@ -1,0 +1,41 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Customer {
+  id             String   @id @default(uuid())
+  customer_code  String   @unique
+  measures       Measure[]
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
+
+model Measure {
+  id             String      @id @default(uuid())
+  measure_uuid   String      @unique
+  image_url      String
+  measure_value  Int
+  measure_type   MeasureType
+  measure_datetime DateTime
+  customer       Customer    @relation(fields: [customerId], references: [id])
+  customerId     String
+  has_confirmed  Boolean     @default(false)
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
+}
+
+enum MeasureType {
+  WATER
+  GAS
+}

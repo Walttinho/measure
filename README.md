@@ -27,9 +27,9 @@ Este projeto é responsável por gerenciar a leitura individualizada de consumo 
 - [x] Configurar o ambiente de desenvolvimento com Node.js e TypeScript.
 
 ### 2. Configuração do Banco de Dados
-- [ ] Modelar o banco de dados para armazenar as leituras de água e gás.
-- [ ] Configurar o TypeORM (ou outro ORM) para integração com o banco de dados.
-- [ ] Implementar as migrations para criação das tabelas necessárias.
+- [x] Modelar o banco de dados para armazenar as leituras de água e gás.
+- [x] Configurar o Prisma para integração com o banco de dados.
+- [x] Implementar as migrations para criação das tabelas necessárias.
 
 ### 3. Implementação de Endpoints
 
