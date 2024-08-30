@@ -19,6 +19,8 @@ model Customer {
   measures       Measure[]
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
+
+  @@index([customer_code])
 }
 
 model Measure {
