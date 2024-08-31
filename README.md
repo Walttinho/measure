@@ -2,88 +2,225 @@
   <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
 </p>
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+# Measure Project
 
-  
+This project is designed to manage individual water and gas consumption readings. The back-end is built using Node.js with TypeScript, Prisma, Docker, and integrates a Google Gemini API to extract values from images.
 
-# Projeto Measure
-
-Este projeto é responsável por gerenciar a leitura individualizada de consumo de água e gás. O back-end é construído utilizando Node.js com TypeScript, Prisma, Docker e integra uma API de LLM (Google Gemini) para extração de valores a partir de imagens.
-
-## Requisitos
+## Prerequisites
 
 - Node.js
 - TypeScript
 - Prisma
 - Docker
 - Git
-- Chave de API do Google Gemini
+- Google Gemini API Key
 
-## Tarefas
+## Tasks Overview
 
-### 1. Configuração Inicial
-- [x] Criar um novo projeto NestJS chamado `measure`.
-- [x] Configurar o ambiente de desenvolvimento com Node.js e TypeScript.
+### 1. Initial Setup
 
-### 2. Configuração do Banco de Dados
-- [x] Modelar o banco de dados para armazenar as leituras de água e gás.
-- [x] Configurar o Prisma para integração com o banco de dados.
-- [x] Implementar as migrations para criação das tabelas necessárias.
+- [x] Create a new NestJS project named `measure`.
+- [x] Configure the development environment with Node.js and TypeScript.
 
-### 3. Implementação de Endpoints
+### 2. Database Configuration
+
+- [x] Design the database schema to store water and gas readings.
+- [x] Set up Prisma for database integration.
+- [x] Implement migrations to create the required tables.
+
+### 3. API Endpoints Implementation
 
 #### 3.1. POST `/upload`
-- [ ] Validar os dados recebidos no corpo da requisição:
-  - [ ] Verificar se a imagem está em formato base64.
-  - [ ] Verificar se os demais parâmetros estão no formato correto (`customer_code`, `measure_datetime`, `measure_type`).
-- [ ] Verificar se já existe uma leitura para o tipo de medida no mês atual.
-- [ ] Integrar com a API do Google Gemini para extrair o valor da imagem.
-- [ ] Retornar a resposta correta com:
-  - [ ] Link temporário da imagem.
-  - [ ] GUID da medida.
-  - [ ] Valor numérico reconhecido.
+
+- **Request**:
+  ```json
+  {
+    "image": "base64",
+    "customer_code": "string",
+    "measure_datetime": "datetime",
+    "measure_type": "WATER" ou "GAS"
+  }
+  ```
+- **Response**:
+  ```json
+  {
+    "image_url": "string",
+    "measure_value": "integer",
+    "measure_uuid": "string"
+  }
+  ```
+- **Description**: This endpoint uploads a new meter reading image. It validates the request, checks for existing readings of the same type in the current month, and extracts the numeric value using the Google Gemini API.
 
 #### 3.2. PATCH `/confirm`
-- [ ] Validar os dados recebidos no corpo da requisição:
-  - [ ] Verificar se o UUID da medida existe.
-  - [ ] Verificar se o valor já foi confirmado.
-- [ ] Atualizar o valor da leitura no banco de dados.
-- [ ] Retornar a resposta correta indicando o sucesso ou erro da operação.
 
-#### 3.3. GET `/<customer_code>/list`
-- [ ] Filtrar as leituras realizadas por um determinado cliente.
-- [ ] Implementar a filtragem opcional por tipo de medida (`measure_type`).
-- [ ] Retornar uma lista com todas as medidas realizadas ou uma mensagem de erro caso nenhuma leitura seja encontrada.
+- **Request**:
+  ```json
+  {
+    "measure_uuid": "string",
+    "confirmed_value": "integer"
+  }
+  ```
+- **Response**:
+  ```json
+  {
+    "success": true
+  }
+  ```
+- **Description**: This endpoint confirms or corrects the extracted value for a reading. It validates the measure ID and updates the reading in the database.
 
+#### 3.3. GET `/<customer_code>/list?measure_type=WATER`
 
-### 4. Integração com o Google Gemini
-- [ ] Obter uma chave de API do Google Gemini.
-- [ ] Configurar a API Key através de variáveis de ambiente (`.env`).
-- [ ] Implementar a comunicação com a API de Vision do Google Gemini para extração dos valores.
+- **Response**:
+  ```json
+  {
+    "customer_code": "string",
+    "measures": [
+      {
+        "measure_uuid": "string",
+        "measure_datetime": "datetime",
+        "measure_type": "string",
+        "has_confirmed": "boolean",
+        "image_url": "string"
+      },
+      {
+        "measure_uuid": "string",
+        "measure_datetime": "datetime",
+        "measure_type": "string",
+        "has_confirmed": "boolean",
+        "image_url": "string"
+      }
+    ]
+  }
+  ```
+- **Description**: This endpoint retrieves all readings for a specific customer, with an optional filter by measure type. It returns a list of readings or an error message if no readings are found.
 
-### 5. Dockerização
-- [ ] Criar um `Dockerfile` para a aplicação.
-- [ ] Configurar o `docker-compose.yml` para subir a aplicação e seus serviços necessários com um único comando.
-- [ ] Testar a execução da aplicação utilizando Docker.
+### 4. Integration with Google Gemini
 
-### 6. Testes
-- [ ] Escrever testes unitários para os endpoints criados.
-- [ ] Garantir cobertura de testes para as principais funcionalidades.
+- [x] Obtain an API key from Google Gemini.
+- [x] Configure the API Key using environment variables (`.env`).
+- [x] Implement communication with Google Gemini's Vision API to extract values.
 
-### 7. Documentação
-- [ ] Documentar a API utilizando ferramentas como Swagger.
-- [ ] Atualizar este README com as instruções de como rodar o projeto localmente e via Docker.
+### 5. Dockerization
 
-### 8. Submissão
-- [ ] Garantir que todos os requisitos foram cumpridos.
-- [ ] Subir o projeto para um repositório Git.
-- [ ] Preencher o formulário de submissão com o link do repositório.
+- [x] Create a `Dockerfile` for the application.
+- [x] Configure `docker-compose.yml` to run the application and its necessary services with a single command.
+- [x] Test the application using Docker.
 
-## Como Executar o Projeto
+### 6. Testing
 
-1. Clone o repositório:
+- [x] Write unit tests for the implemented endpoints.
+- [x] Ensure test coverage for the main functionalities.
+
+### 7. Documentation
+
+- [x] Document the API using tools like Swagger.
+- [x] Update this README with instructions on how to run the project locally and via Docker.
+
+### 8. Submission
+
+- [x] Ensure all requirements are met.
+- [x] Push the project to a Git repository.
+- [x] Fill out the submission form with the repository link.
+
+## Running the Project
+
+1. Clone the repository:
+
    ```bash
-   git clone <link-do-repositorio>
+   git clone https://github.com/Walttinho/measure.git
    cd measure
+   ```
 
+2. Copy the `.env.example` file to `.env` and fill in the environment variables:
+
+   ```bash
+   DATABASE_URL="postgresql://username:password@localhost:5432/database_name?schema=public"
+
+   POSTGRES_USER=your_username
+   POSTGRES_PASSWORD=your_password
+   POSTGRES_DB=database_name
+
+   GEMINI_API_KEY="your_api_key_here"
+   ```
+
+3. Install dependencies and start the application:
+   ```bash
+   npm install
+   npx prisma db push && npx prisma generate
+   npm run start:dev
+   ```
+
+The service will be available at [http://localhost:3000](http://localhost:3000).
+
+## API Endpoints
+
+- **POST /api/upload**: Upload a new meter reading.
+- **PATCH /api/confirm**: Confirm or correct a reading.
+- **GET /api/<customer_code>/list**: List readings by customer.
+
+For more details on the endpoints, refer to the API documentation (if available).
+
+## Running Tests
+
+To execute the tests, run:
+
+```bash
+npm run test
+```
+
+## Project Structure and File Descriptions
+
+```
+.
+├── docker-compose.yml
+├── Dockerfile
+├── nest-cli.json
+├── package.json
+├── package-lock.json
+├── prisma
+│   ├── migrations
+│   │   ├── 20240830012043_init
+│   │   └── migration_lock.toml
+│   └── schema.prisma
+├── README.md
+├── src
+│   ├── app.module.ts
+│   ├── customer
+│   │   ├── dto
+│   │   │   └── customer.dto.ts
+│   │   ├── module
+│   │   │   └── customer.module.ts
+│   │   ├── repository
+│   │   │   └── customer.repository.ts
+│   │   └── service
+│   │       ├── customer.service.spec.ts
+│   │       └── customer.service.ts
+│   ├── main.ts
+│   ├── measure
+│   │   ├── controller
+│   │   │   ├── measure.controller.spec.ts
+│   │   │   └── measure.controller.ts
+│   │   ├── dto
+│   │   │   └── measure.dto.ts
+│   │   ├── module
+│   │   │   └── measure.module.ts
+│   │   ├── repository
+│   │   │   └── measure.repository.ts
+│   │   └── service
+│   │       ├── measure.service.spec.ts
+│   │       └── measure.service.ts
+│   └── prisma
+│       ├── prisma.module.ts
+│       ├── prisma.service.ts
+│       └── repositories
+│           ├── prisma-customer.repository.ts
+│           └── prisma-measure.repository.ts
+├── test
+│   ├── app.e2e-spec.ts
+│   └── jest-e2e.json
+├── tsconfig.build.json
+└── tsconfig.json
+
+23 directories, 35 files
+
+```
