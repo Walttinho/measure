@@ -151,15 +151,12 @@ export class MeasureService {
 
   private async uploadImage(base64Image: string): Promise<string> {
     const fileManager = new GoogleAIFileManager(process.env.GEMINI_API_KEY);
-    console.log('File', fileManager);
 
     try {
       const response = await fileManager.uploadFile(base64Image, {
         mimeType: 'image/png',
         displayName: 'measure',
       });
-
-      console.log('response', response);
 
       return response.file.uri;
     } catch (error) {
@@ -288,7 +285,6 @@ export class MeasureService {
       const result = await model.generateContent([prompt, base64Image]);
 
       const value = parseInt(result.response.text(), 10);
-      console.log('value', value);
       if (isNaN(value)) {
         throw new Error('Failed to extract a valid numeric value.');
       }
