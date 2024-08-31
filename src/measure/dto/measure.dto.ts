@@ -1,3 +1,4 @@
+// src/measure/dto/measure.dto.ts
 import {
   IsString,
   IsNumber,
@@ -19,30 +20,31 @@ export class CreateMeasureRequestDto {
   customer_code: string;
 
   @ApiProperty({
-    description: 'Data e hora da medição',
+    description: 'Data e hora da medição (ISO 8601)',
     example: '2023-05-01T12:00:00.000Z',
   })
   @IsDate()
   measure_datetime: Date;
 
   @ApiProperty({
-    description: 'Tipo de medida',
+    description: 'Tipo de medida (ex: WATER, GAS)',
     example: MeasureType.WATER,
   })
   @IsEnum(MeasureType)
   measure_type: MeasureType;
 
   @ApiProperty({
-    description: 'Imagem da medição em base64',
+    description: 'Imagem da medição em formato base64',
     example:
       'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNby...',
   })
   @IsString()
   image: string;
 }
+
 export class CreateMeasureDto {
   @ApiProperty({
-    description: 'UUID da medida',
+    description: 'UUID único da medida',
     example: 'a123e456-7e89-12d3-a456-426614174000',
   })
   @IsString()
@@ -56,21 +58,21 @@ export class CreateMeasureDto {
   image: string;
 
   @ApiProperty({
-    description: 'Valor da medida',
+    description: 'Valor numérico da medida',
     example: 100,
   })
   @IsNumber()
   measure_value: number;
 
   @ApiProperty({
-    description: 'Tipo de medida',
+    description: 'Tipo de medida (ex: WATER, GAS)',
     example: MeasureType.WATER,
   })
   @IsEnum(MeasureType)
   measure_type: MeasureType;
 
   @ApiProperty({
-    description: 'Data e hora da medida',
+    description: 'Data e hora da medida (ISO 8601)',
     example: '2024-08-29T14:00:00Z',
   })
   @Transform(({ value }) => new Date(value), { toClassOnly: true })
@@ -105,7 +107,7 @@ export class UpdateMeasureDto {
   image?: string;
 
   @ApiProperty({
-    description: 'Valor da medida',
+    description: 'Valor atualizado da medida',
     example: 150,
     required: false,
   })
@@ -114,7 +116,7 @@ export class UpdateMeasureDto {
   measure_value?: number;
 
   @ApiProperty({
-    description: 'Tipo de medida',
+    description: 'Tipo de medida (ex: WATER, GAS)',
     example: MeasureType.GAS,
     required: false,
   })
@@ -123,7 +125,7 @@ export class UpdateMeasureDto {
   measure_type?: MeasureType;
 
   @ApiProperty({
-    description: 'Data e hora da medida',
+    description: 'Data e hora atualizada da medida (ISO 8601)',
     example: '2024-08-30T14:00:00Z',
     required: false,
   })
@@ -144,14 +146,14 @@ export class UpdateMeasureDto {
 
 export class ConfirmMeasureDto {
   @ApiProperty({
-    description: 'UUID da medida',
+    description: 'UUID único da medida a ser confirmada',
     example: 'a123e456-7e89-12d3-a456-426614174000',
   })
   @IsString()
   measure_uuid: string;
 
   @ApiProperty({
-    description: 'Valor da medida',
+    description: 'Valor confirmado da medida',
     example: 100,
   })
   @IsNumber()

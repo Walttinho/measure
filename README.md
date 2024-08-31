@@ -152,6 +152,8 @@ This project is designed to manage individual water and gas consumption readings
 
 The service will be available at [http://localhost:3000](http://localhost:3000).
 
+Documentation Swagger will be available at [http://localhost:3000/docs](http://localhost:3000/docs).
+
 ## API Endpoints
 
 - **POST /api/upload**: Upload a new meter reading.

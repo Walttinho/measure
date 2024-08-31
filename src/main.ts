@@ -9,13 +9,14 @@ async function bootstrap() {
   const config = new DocumentBuilder()
     .setTitle('Water and Gas Meter Reading API')
     .setDescription(
-      'API documentation for managing water and gas meter readings.',
+      'API para gerenciar leituras de medidores de água e gás, incluindo upload de imagens, confirmação de leituras e consulta de dados.',
     )
-    .setVersion('1.0')
-    .addTag('Measure')
+    .setVersion('1.1')
+    .addTag('Medidas', 'Endpoints relacionados às medidas registradas')
     .build();
+
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('doc', app, document);
+  SwaggerModule.setup('docs', app, document);
 
   app.use(bodyParser.json({ limit: '5mb' }));
   app.use(bodyParser.urlencoded({ limit: '5mb', extended: true }));
