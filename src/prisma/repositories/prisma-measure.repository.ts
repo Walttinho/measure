@@ -1,8 +1,11 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { PrismaService } from '../../prisma/prisma.service';
 import { Measure, MeasureType } from '@prisma/client';
-import { MeasureRepository } from '../measure.repository';
-import { CreateMeasureDto, UpdateMeasureDto } from 'src/dto/measure.dto';
+import { MeasureRepository } from '../../measure/repository/measure.repository';
+import {
+  CreateMeasureDto,
+  UpdateMeasureDto,
+} from '../../measure/dto/measure.dto';
 
 @Injectable()
 export class PrismaMeasureRepository implements MeasureRepository {
@@ -15,7 +18,7 @@ export class PrismaMeasureRepository implements MeasureRepository {
   }
 
   async findByCustomerAndMonth(
-    customerId: string,
+    customer_id: string,
     measureType: MeasureType,
     month: Date,
   ): Promise<Measure | null> {
@@ -24,7 +27,7 @@ export class PrismaMeasureRepository implements MeasureRepository {
 
     return this.prisma.measure.findFirst({
       where: {
-        customerId,
+        customer_id,
         measure_type: measureType,
         measure_datetime: {
           gte: startOfMonth,
@@ -48,12 +51,12 @@ export class PrismaMeasureRepository implements MeasureRepository {
   }
 
   async findAllByCustomer(
-    customerId: string,
+    customer_code: string,
     measureType?: MeasureType,
   ): Promise<Measure[]> {
     const whereClause = measureType
-      ? { customerId, measure_type: measureType }
-      : { customerId };
+      ? { customer_code, measure_type: measureType }
+      : { customer_code };
 
     return this.prisma.measure.findMany({
       where: whereClause,

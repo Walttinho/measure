@@ -3,7 +3,7 @@ import { Measure, MeasureType } from '@prisma/client';
 export abstract class MeasureRepository {
   abstract findByUUID(measure_uuid: string): Promise<Measure | null>;
   abstract findByCustomerAndMonth(
-    customerId: string,
+    customer_code: string,
     measureType: MeasureType,
     month: Date,
   ): Promise<Measure | null>;
@@ -13,7 +13,7 @@ export abstract class MeasureRepository {
     data: Partial<Measure>,
   ): Promise<Measure>;
   abstract findAllByCustomer(
-    customerId: string,
+    customer_code: string,
     measureType?: MeasureType,
   ): Promise<Measure[]>;
 }
